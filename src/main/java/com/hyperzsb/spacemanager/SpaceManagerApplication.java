@@ -10,7 +10,6 @@ public class SpaceManagerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpaceManagerApplication.class, args);
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
     }
 
 }
