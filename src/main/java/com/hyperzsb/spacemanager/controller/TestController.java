@@ -2,8 +2,11 @@ package com.hyperzsb.spacemanager.controller;
 
 import com.hyperzsb.spacemanager.domain.Academy;
 import com.hyperzsb.spacemanager.domain.Borrower;
+import com.hyperzsb.spacemanager.domain.Room;
 import com.hyperzsb.spacemanager.repository.AcademyRepository;
 import com.hyperzsb.spacemanager.repository.BorrowerRepository;
+import com.hyperzsb.spacemanager.repository.BorrowingOrderRepository;
+import com.hyperzsb.spacemanager.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,10 @@ public class TestController {
     private AcademyRepository academyRepository;
     @Autowired
     private BorrowerRepository borrowerRepository;
+    @Autowired
+    private BorrowingOrderRepository borrowingOrderRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @RequestMapping("/insertAcademy")
     public void insertAcademy(Integer id, String name) {
@@ -73,4 +80,21 @@ public class TestController {
         List<Borrower> borrowerList = borrowerRepository.findAll();
         return borrowerList;
     }
+
+    @RequestMapping("/insertRoom")
+    public void insertRoom(Integer id, String name, String note, int availabilityValue) {
+        Room room = new Room(id, name, note, availabilityValue);
+        roomRepository.save(room);
+    }
+
+    @RequestMapping("/getRooms")
+    @ResponseBody
+    public List<Room> getRooms() {
+        List<Room> roomList = roomRepository.findAll();
+        for(Room room:roomList){
+            System.out.println();
+        }
+        return roomList;
+    }
+
 }
