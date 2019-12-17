@@ -4,7 +4,7 @@ import com.hyperzsb.spacemanager.converter.OrderStatusConverter;
 import com.hyperzsb.spacemanager.emuneration.OrderStatus;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "borrowing_order")
@@ -13,25 +13,59 @@ public class BorrowingOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "borrower_id", referencedColumnName = "id")
     private Borrower borrower;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
-    @Column
+    @Column(name = "order_note")
     private String note;
 
+    @Column(name = "order_time")
+    private Timestamp time;
+
     @Column(name = "start_time")
-    private Date startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_time")
-    private Date endTime;
+    private Timestamp endTime;
 
+    @Column(name = "order_status")
     @Convert(converter = OrderStatusConverter.class)
     private OrderStatus orderStatus;
+
+    public BorrowingOrder(Borrower borrower, Room room, String note, Timestamp time, Timestamp startTime, Timestamp endTime, OrderStatus orderStatus) {
+        this.borrower = borrower;
+        this.room = room;
+        this.note = note;
+        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.orderStatus = orderStatus;
+    }
+
+    public BorrowingOrder(Borrower borrower, Room room, String note, Timestamp time, Timestamp startTime, Timestamp endTime) {
+        this.borrower = borrower;
+        this.room = room;
+        this.note = note;
+        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.orderStatus=OrderStatus.UNDETERMINED;
+    }
+
+    public BorrowingOrder() {
+        this.borrower = null;
+        this.room = null;
+        this.note = null;
+        this.time = null;
+        this.startTime = null;
+        this.endTime = null;
+        this.orderStatus=OrderStatus.UNDETERMINED;
+    }
 
     public Long getId() {
         return id;
@@ -65,19 +99,35 @@ public class BorrowingOrder {
         this.note = note;
     }
 
-    public Date getStartTime() {
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

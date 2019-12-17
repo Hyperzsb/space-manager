@@ -2,6 +2,7 @@ package com.hyperzsb.spacemanager.controller;
 
 import com.hyperzsb.spacemanager.domain.Academy;
 import com.hyperzsb.spacemanager.domain.Borrower;
+import com.hyperzsb.spacemanager.domain.BorrowingOrder;
 import com.hyperzsb.spacemanager.domain.Room;
 import com.hyperzsb.spacemanager.repository.AcademyRepository;
 import com.hyperzsb.spacemanager.repository.BorrowerRepository;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
@@ -91,10 +95,27 @@ public class TestController {
     @ResponseBody
     public List<Room> getRooms() {
         List<Room> roomList = roomRepository.findAll();
-        for(Room room:roomList){
+        for (Room room : roomList) {
             System.out.println();
         }
         return roomList;
     }
+    //insertOrder?borrowerId=1120180000&roomId=2&note=借用研讨室开会&timeStr=2019-12-17%2021:25&startTimeStr=2019-12-18%2008:30&endTimeStr=2019-12-18%2011:00
+    @RequestMapping("/insertOrder")
+    public void insertOrder(Integer borrowerId, Integer roomId, String note, String timeStr, String startTimeStr, String endTimeStr) throws ParseException {
+        Timestamp time = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(timeStr).getTime());
+        Timestamp startTime = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(startTimeStr).getTime());
+        Timestamp endTime = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(endTimeStr).getTime());
+        Borrower borrower = borrowerRepository.findById(borrowerId).get();
+        Room room = roomRepository.findById(roomId).get();
+        BorrowingOrder borrowingOrder = new BorrowingOrder(borrower, room, note, time, startTime, endTime);
+        borrowingOrderRepository.save(borrowingOrder);
+    }
 
+    @RequestMapping("/getOrders")
+    @ResponseBody
+    public List<BorrowingOrder> getOrders() {
+        List<BorrowingOrder> borrowingOrderList = borrowingOrderRepository.findAll();
+        return borrowingOrderList;
+    }
 }

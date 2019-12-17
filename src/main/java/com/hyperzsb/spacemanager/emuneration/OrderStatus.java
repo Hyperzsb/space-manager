@@ -37,17 +37,4 @@ public enum OrderStatus {
     public void setStatus(String status) {
         this.status = status;
     }
-
-//    public static class Convert implements AttributeConverter<OrderStatus, Integer> {
-//
-//        @Override
-//        public Integer convertToDatabaseColumn(OrderStatus orderStatus) {
-//            return orderStatus.getValue();
-//        }
-//
-//        @Override
-//        public OrderStatus convertToEntityAttribute(Integer value) {
-//            return OrderStatus.getOrderStatusByValue(value);
-//        }
-//    }
 }

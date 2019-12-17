@@ -36,17 +36,4 @@ public enum Availability {
     public void setAvailability(String availability) {
         this.availability = availability;
     }
-
-//    public static class Convert implements AttributeConverter<Availability, Integer> {
-//
-//        @Override
-//        public Integer convertToDatabaseColumn(Availability availability) {
-//            return availability.getValue();
-//        }
-//
-//        @Override
-//        public Availability convertToEntityAttribute(Integer value) {
-//            return Availability.getAvailabilityByValue(value);
-//        }
-//    }
 }

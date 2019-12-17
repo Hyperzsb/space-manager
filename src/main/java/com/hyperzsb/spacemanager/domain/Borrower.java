@@ -1,18 +1,19 @@
 package com.hyperzsb.spacemanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "borrower")
 public class Borrower {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "borrower_name")
     private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "academy_id", referencedColumnName = "id")
     private Academy academy;
 
@@ -48,6 +49,7 @@ public class Borrower {
         return academy;
     }
 
+    @JsonBackReference
     public void setAcademy(Academy academy) {
         this.academy = academy;
     }
