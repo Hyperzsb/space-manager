@@ -3,9 +3,10 @@ package com.hyperzsb.spacemanager.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "room_borrower")
+@Table(name = "borrower")
 public class Borrower {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "borrower_name")
