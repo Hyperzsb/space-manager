@@ -6,7 +6,8 @@
  * @LastEditors: ZSB
  * @LastEditTime: 2019-12-11 08:32:54
  -->
-#Space Manager for BIT Ruixin Academy
+Space Manager for BIT Ruixin Academy
+===
 - **用于睿信书院社区空间的日常事务管理，包括：**
 	- 用户
 		- 空间预约登记
