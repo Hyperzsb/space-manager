@@ -1,17 +1,15 @@
 package com.hyperzsb.spacemanager.emuneration;
 
-import javax.persistence.AttributeConverter;
-
 public enum Availability {
     UNAVAILABLE(0, "不可用"),
     AVAILABLE(1, "可用");
 
     private int value;
-    private String availability;
+    private String info;
 
-    Availability(int value, String availability) {
+    Availability(int value, String info) {
         this.value = value;
-        this.availability = availability;
+        this.info = info;
     }
 
     public static Availability getAvailabilityByValue(int value) {
@@ -29,11 +27,11 @@ public enum Availability {
         this.value = value;
     }
 
-    public String getAvailability() {
-        return availability;
+    public String getInfo() {
+        return info;
     }
 
-    public void setAvailability(String availability) {
-        this.availability = availability;
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

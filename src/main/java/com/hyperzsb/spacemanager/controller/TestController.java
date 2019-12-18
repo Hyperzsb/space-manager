@@ -87,7 +87,7 @@ public class TestController {
 
     @RequestMapping("/insertRoom")
     public void insertRoom(Integer id, String name, String note, int availabilityValue) {
-        Room room = new Room(id, name, note, availabilityValue);
+        Room room = new Room(name, note, availabilityValue);
         roomRepository.save(room);
     }
 
