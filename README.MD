@@ -6,8 +6,14 @@
  * @LastEditors: ZSB
  * @LastEditTime: 2019-12-11 08:32:54
  -->
-<font size=5 face="Elephant" color="A12485">Space Manager for BIT RuiXin Academy</font>
-<font face="楷体" size=5 color="A12485">北京理工大学睿信书院社区空间管理平台</font>
----
-
-
+#Space Manager for BIT Ruixin Academy
+- **用于睿信书院社区空间的日常事务管理，包括：**
+	- 用户
+		- 空间预约登记
+		- 空间使用信息、活动信息查询
+	- 管理员
+		- 预约申请处理
+		- 空间管理
+		- 物资管理
+		- 人员管理
+- ***后续功能设计中...***
