@@ -1,7 +1,14 @@
-package com.hyperzsb.spacemanager.vo;
+package com.hyperzsb.spacemanager.domain;
 
-public class TestVo {
+public class Test {
     private String name;
+
+    public Test() {
+    }
+
+    public Test(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

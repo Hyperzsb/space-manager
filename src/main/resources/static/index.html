@@ -9,15 +9,14 @@
             var params = {
                 'name': '学生活动空间'
             }
-            $.post({
-                url: "./room/",
-                contentType: "application/json",
-                data: JSON.stringify(params),
-                success: function (result) {
-                    if (result == null || result.id == null)
-                        alert("Failed!");
-                    else
-                        alert("Succeeded!");
+            $.ajax({
+                type: 'post',
+                url: '/room/test',
+                data: JSON.stringify(params).toString(),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    alert("!!!");
                 }
             });
         }
