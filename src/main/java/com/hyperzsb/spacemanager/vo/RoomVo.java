@@ -10,7 +10,7 @@ public class RoomVo {
     private int availabilityValue;
     private String availabilityInfo;
 
-    public static Room changeToPo(RoomVo roomVo) {
+    public static Room convertToPo(RoomVo roomVo) {
         Room room = new Room();
         room.setId(roomVo.getId());
         room.setName(roomVo.getName());
@@ -19,7 +19,7 @@ public class RoomVo {
         return room;
     }
 
-    public static RoomVo changeToVo(Room room) {
+    public static RoomVo convertToVo(Room room) {
         RoomVo roomVo = new RoomVo();
         roomVo.setId(room.getId());
         roomVo.setName(room.getName());

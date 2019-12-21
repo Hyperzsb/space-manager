@@ -1,15 +1,16 @@
 package com.hyperzsb.spacemanager.controller;
 
 import com.hyperzsb.spacemanager.domain.Room;
+import com.hyperzsb.spacemanager.exception.RoomDaoException;
 import com.hyperzsb.spacemanager.service.RoomService;
 import com.hyperzsb.spacemanager.vo.RoomVo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class RoomController {
     @PostMapping("/")
     public ResponseEntity<RoomVo> addRoom(@RequestBody RoomVo roomVo) {
         try {
-            Room room = roomService.addRoom(RoomVo.changeToPo(roomVo));
-            RoomVo resultRoomVo = RoomVo.changeToVo(room);
+            Room room = roomService.addRoom(RoomVo.convertToPo(roomVo));
+            RoomVo resultRoomVo = RoomVo.convertToVo(room);
             HttpHeaders httpHeaders = new HttpHeaders();
             String success = "Succeeded!";
             httpHeaders.add("success", success);
@@ -41,21 +42,35 @@ public class RoomController {
     @ResponseBody
     public RoomVo getRoom(@PathVariable("id") Integer id) {
         Room room = roomService.getRoomById(id);
-        return RoomVo.changeToVo(room);
+        return RoomVo.convertToVo(room);
     }
 
-    @GetMapping("/{name}")
-    @ResponseBody
-    public RoomVo getRoom(@PathVariable("name") String name) {
-        Room room = roomService.getRoomByName(name);
-        return RoomVo.changeToVo(room);
-    }
-
-    @GetMapping("/")
+    @GetMapping
     @ResponseBody
     public List<Room> getRoom() {
         return roomService.getAllRoom();
     }
 
+    @PutMapping("/")
+    @ResponseBody
+    public RoomVo updateRoom(@RequestBody RoomVo roomVo) {
+        Room room = RoomVo.convertToPo(roomVo);
+        roomService.updateRoomByName(room.getName(), room.getNote(), room.getAvailability().getValue());
+        return roomVo;
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public RoomVo deleteRoom(@PathVariable("id") Integer id) {
+        Room room = roomService.removeRoomById(id);
+        return RoomVo.convertToVo(room);
+    }
+
+    @DeleteMapping("/{name}")
+    @ResponseBody
+    public RoomVo deleteRoom(@PathVariable("name") String name) {
+        Room room = roomService.removeRoomByName(name);
+        return RoomVo.convertToVo(room);
+    }
 
 }

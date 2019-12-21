@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bootstrap 实例 - 默认的导航栏</title>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+    </style>
+    <script src="webjars/jquery/2.1.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function bindEventHandler() {
+            const roomNav = $("#roomNav").children("li");
+            const roomNavNum = roomNav.length;
+            for (let i = 0; i < roomNavNum; i++) {
+                roomNav.eq(i).bind('click', function () {
+                    const roomNav = $("#roomNav").children("li");
+                    const roomNavNum = roomNav.length;
+                    for (let j = 0; j < roomNavNum; j++) {
+                        if (j == i) {
+                            if (!roomNav.eq(j).hasClass('active'))
+                                roomNav.eq(j).addClass('active');
+                        } else {
+                            if (roomNav.eq(j).hasClass('active'))
+                                roomNav.eq(j).removeClass('active');
+                        }
+                    }
+                })
+            }
+            const getRoomNav = $("#roomNav").children('li').eq(0);
+            getRoomNav.bind('click', function () {
+                $.get("./room", function (rooms, status) {
+                    const table = $("#roomTable");
+                    alert(status);
+                    const roomNum = rooms.length;
+                    if (roomNum !== 0)
+                        for (let i = 0; i < roomNum; i++) {
+                            var tr = '<tr>' +
+                                '<td>' + rooms[i].id + '</td>' +
+                                '<td>' + rooms[i].name + '</td>' +
+                                '<td>' + rooms[i].note + '</td>' +
+                                '</tr>';
+                            table.append(tr)
+                        }
+                    else {
+                        var tr = '<tr>' +
+                            '<td>null</td>' +
+                            '<td>null</td>' +
+                            '<td>null</td>' +
+                            '</tr>';
+                        table.append(tr)
+                    }
+                })
+            })
+        }
+
+        $(document).ready(function () {
+            bindEventHandler();
+        })
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">睿信书院社区空间管理平台</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">房间管理</a></li>
+                <li><a href="#">借用请求管理</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row" style="padding: 10px 0px;">
+        <div class="col-lg-12">
+            <ul class="nav nav-tabs" id="roomNav">
+                <li class="active"><a href="#">所有房间</a></li>
+                <li><a href="#">查询房间</a></li>
+                <li><a href="#">添加房间</a></li>
+                <li><a href="#">修改房间信息</a></li>
+                <li><a href="#">删除房间</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-striped">
+                <caption>房间信息</caption>
+                <thead>
+                <tr>
+                    <th>房间名称</th>
+                    <th>房间备注</th>
+                    <th>是否可借用</th>
+                </tr>
+                </thead>
+                <tbody id="roomTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
