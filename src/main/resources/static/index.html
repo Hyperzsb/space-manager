@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        function post() {
+            var params = {
+                'name': '学生活动空间'
+            }
+            $.ajax({
+                type: 'post',
+                url: '/room/test',
+                data: JSON.stringify(params).toString(),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    alert("!!!");
+                }
+            });
+        }
+
+        function get() {
+            $.get("./room/1", function (room, status) {
+                if (room == null)
+                    alert("Empty!");
+                else
+                    alert(JSON.stringify(room));
+            })
+        }
+    </script>
+</head>
+<body>
+<div id="content">
+    Hello!
+    <input type="button" onclick="post()" value="test">
+</div>
+</body>
+</html>

@@ -22,22 +22,19 @@ public class Room {
     @Convert(converter = AvailabilityConverter.class)
     private Availability availability;
 
-    public Room(Integer id, String name, String note, int availabilityValue) {
-        this.id = id;
+    public Room(String name, String note, int availabilityValue) {
         this.name = name;
         this.note = note;
         this.availability = Availability.getAvailabilityByValue(availabilityValue);
     }
 
-    public Room(Integer id, String name, int availabilityValue) {
-        this.id = id;
+    public Room(String name, int availabilityValue) {
         this.name = name;
         this.name = null;
         this.availability = Availability.getAvailabilityByValue(availabilityValue);
     }
 
     public Room() {
-        this.id = 0;
         this.name = null;
         this.note = null;
         this.availability = Availability.UNAVAILABLE;
@@ -47,12 +44,8 @@ public class Room {
         this.id = id;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
