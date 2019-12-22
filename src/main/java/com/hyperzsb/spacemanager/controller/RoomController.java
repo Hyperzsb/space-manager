@@ -6,13 +6,14 @@ import com.hyperzsb.spacemanager.service.RoomService;
 import com.hyperzsb.spacemanager.vo.RoomVo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/room")
@@ -47,8 +48,13 @@ public class RoomController {
 
     @GetMapping
     @ResponseBody
-    public List<Room> getRoom() {
-        return roomService.getAllRoom();
+    public List<RoomVo> getRoom() {
+        List<Room> roomList=roomService.getAllRoom();
+        List<RoomVo> roomVoList = new ArrayList<RoomVo>();
+        for(Room room :roomList){
+            roomVoList.add(RoomVo.convertToVo(room));
+        }
+        return roomVoList;
     }
 
     @PutMapping("/")
