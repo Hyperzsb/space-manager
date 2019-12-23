@@ -25,14 +25,6 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public Room addRoom(String name, String note, int availabilityValue) {
-        if (roomRepository.findByName(name) != null)
-            throw new RoomDaoException("Room existed");
-        return roomRepository.save(new Room(name, note, availabilityValue));
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public Room getRoomById(Integer id) {
         if (roomRepository.findById(id).isPresent())
@@ -68,10 +60,10 @@ public class RoomServiceImpl implements RoomService {
             room.setName(name);
             room.setNote(note);
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
+            return roomRepository.save(room);
         } else {
             throw new RoomDaoException("No such room to update");
         }
-        return roomRepository.save(room);
     }
 
     @Override
@@ -83,10 +75,10 @@ public class RoomServiceImpl implements RoomService {
             room.setName(name);
             room.setNote(note);
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
+            return roomRepository.save(room);
         } else {
             throw new RoomDaoException("No such room to update");
         }
-        return roomRepository.save(room);
     }
 
     @Override

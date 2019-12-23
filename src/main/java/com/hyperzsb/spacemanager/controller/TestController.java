@@ -1,9 +1,7 @@
 package com.hyperzsb.spacemanager.controller;
 
-import com.hyperzsb.spacemanager.domain.Academy;
 import com.hyperzsb.spacemanager.domain.Borrower;
 import com.hyperzsb.spacemanager.domain.BorrowingOrder;
-import com.hyperzsb.spacemanager.domain.Room;
 import com.hyperzsb.spacemanager.repository.AcademyRepository;
 import com.hyperzsb.spacemanager.repository.BorrowerRepository;
 import com.hyperzsb.spacemanager.repository.BorrowingOrderRepository;
@@ -14,11 +12,6 @@ import com.hyperzsb.spacemanager.vo.BorrowingOrderVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 @Controller
 @RequestMapping("/test")
@@ -39,14 +32,22 @@ public class TestController {
     @PostMapping("/order")
     @ResponseBody
     public BorrowingOrder addOrder(@RequestBody BorrowingOrderVo borrowingOrderVo) {
-        BorrowingOrder borrowingOrder = BorrowingOrderVo.convertToPo(borrowingOrderVo);
-        return borrowingOrderService.addOrder(borrowingOrder);
+        try {
+            BorrowingOrder borrowingOrder = BorrowingOrderVo.convertToPo(borrowingOrderVo);
+            return borrowingOrderService.addOrder(borrowingOrder);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/order/{id}")
     @ResponseBody
     public BorrowingOrder getOrderById(@PathVariable("id") Integer id) {
-        return borrowingOrderService.getOrderByOrderId(id);
+        try {
+            return borrowingOrderService.getOrderByOrderId(id);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @GetMapping("/borrower/{id}")

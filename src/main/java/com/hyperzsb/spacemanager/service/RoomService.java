@@ -7,8 +7,6 @@ import java.util.List;
 public interface RoomService {
     Room addRoom(Room room);
 
-    Room addRoom(String name, String note, int availabilityValue) throws Exception;
-
     Room getRoomById(Integer id);
 
     Room getRoomByName(String name);

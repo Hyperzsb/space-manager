@@ -1,13 +1,14 @@
 package com.hyperzsb.spacemanager.service;
 
 import com.hyperzsb.spacemanager.domain.BorrowingOrder;
+import com.hyperzsb.spacemanager.exception.BorrowingOrderDaoException;
 
 import java.util.List;
 
 public interface BorrowingOrderService {
-    BorrowingOrder addOrder(BorrowingOrder borrowingOrder);
+    BorrowingOrder addOrder(BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException;
 
-    BorrowingOrder getOrderByOrderId(Integer id);
+    BorrowingOrder getOrderByOrderId(Integer id) throws BorrowingOrderDaoException;
 
     List<BorrowingOrder> getOrderByBorrowerId(Integer id);
 
@@ -17,7 +18,7 @@ public interface BorrowingOrderService {
 
     List<BorrowingOrder> getOrderByRoomName(String name);
 
-    BorrowingOrder updateOrderByOrderId(Integer id, BorrowingOrder borrowingOrder);
+    BorrowingOrder updateOrderByOrderId(Integer id, BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException;
 
-    BorrowingOrder deleteOrderByOrderId(Integer id);
+    BorrowingOrder deleteOrderByOrderId(Integer id) throws BorrowingOrderDaoException;
 }

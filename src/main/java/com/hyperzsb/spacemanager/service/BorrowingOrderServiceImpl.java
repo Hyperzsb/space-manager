@@ -1,11 +1,11 @@
 package com.hyperzsb.spacemanager.service;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.hyperzsb.spacemanager.domain.Academy;
 import com.hyperzsb.spacemanager.domain.Borrower;
 import com.hyperzsb.spacemanager.domain.BorrowingOrder;
 import com.hyperzsb.spacemanager.domain.Room;
 import com.hyperzsb.spacemanager.exception.BorrowingOrderConflictException;
+import com.hyperzsb.spacemanager.exception.BorrowingOrderDaoException;
 import com.hyperzsb.spacemanager.repository.AcademyRepository;
 import com.hyperzsb.spacemanager.repository.BorrowerRepository;
 import com.hyperzsb.spacemanager.repository.BorrowingOrderRepository;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BorrowingOrderServiceImpl implements BorrowingOrderService {
@@ -30,30 +31,38 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public BorrowingOrder addOrder(BorrowingOrder borrowingOrder) {
-        Academy academy = academyRepository.findAcademyByName(borrowingOrder.getBorrower().getAcademy().getName());
-        Borrower borrower = new Borrower(borrowingOrder.getBorrower().getId(),
-                borrowingOrder.getBorrower().getName(), academy);
-        borrowingOrder.setBorrower(borrower);
-        Room room = roomRepository.findByName(borrowingOrder.getRoom().getName());
-        borrowingOrder.setRoom(room);
-        List<BorrowingOrder> borrowingOrderList =
-                borrowingOrderRepository.findBorrowingOrdersByRoomName(borrowingOrder.getRoom().getName());
-        for (BorrowingOrder bO : borrowingOrderList) {
-            if (bO.getStartTime().compareTo(borrowingOrder.getEndTime()) < 0
-                    || bO.getEndTime().compareTo(borrowingOrder.getStartTime()) > 0) {
-                throw new BorrowingOrderConflictException(bO);
+    public BorrowingOrder addOrder(BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException {
+        try {
+            Academy academy = academyRepository.findAcademyByName(borrowingOrder.getBorrower().getAcademy().getName());
+            Borrower borrower = new Borrower(borrowingOrder.getBorrower().getId(),
+                    borrowingOrder.getBorrower().getName(), academy);
+            borrowingOrder.setBorrower(borrower);
+            Room room = roomRepository.findByName(borrowingOrder.getRoom().getName());
+            borrowingOrder.setRoom(room);
+            List<BorrowingOrder> borrowingOrderList =
+                    borrowingOrderRepository.findBorrowingOrdersByRoomName(borrowingOrder.getRoom().getName());
+            for (BorrowingOrder bO : borrowingOrderList) {
+                if (bO.getStartTime().compareTo(borrowingOrder.getEndTime()) < 0
+                        || bO.getEndTime().compareTo(borrowingOrder.getStartTime()) > 0) {
+                    throw new BorrowingOrderConflictException(bO);
+                }
             }
+            borrowerRepository.save(borrower);
+            borrowingOrderRepository.save(borrowingOrder);
+            return borrowingOrder;
+        } catch (Exception e) {
+            throw new BorrowingOrderDaoException("Unable to add new order");
         }
-        borrowerRepository.save(borrower);
-        borrowingOrderRepository.save(borrowingOrder);
-        return borrowingOrder;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public BorrowingOrder getOrderByOrderId(Integer id) {
-        return borrowingOrderRepository.findById(id).get();
+    public BorrowingOrder getOrderByOrderId(Integer id) throws BorrowingOrderDaoException {
+        Optional<BorrowingOrder> borrowingOrder = borrowingOrderRepository.findById(id);
+        if (borrowingOrder.isPresent())
+            return borrowingOrder.get();
+        else
+            throw new BorrowingOrderDaoException("No such order");
     }
 
     @Override
@@ -82,18 +91,46 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public BorrowingOrder updateOrderByOrderId(Integer id, BorrowingOrder newBorrowingOrder) {
-        BorrowingOrder oldBorrowingOrder = borrowingOrderRepository.findById(id).get();
-        newBorrowingOrder.setId(oldBorrowingOrder.getId());
-        borrowingOrderRepository.save(newBorrowingOrder);
-        return newBorrowingOrder;
+    public BorrowingOrder updateOrderByOrderId(Integer id, BorrowingOrder newBorrowingOrder) throws BorrowingOrderDaoException {
+        Optional<BorrowingOrder> oldBorrowingOrder = borrowingOrderRepository.findById(id);
+        if (oldBorrowingOrder.isPresent()) {
+            Academy academy = academyRepository.findAcademyByName(newBorrowingOrder.getBorrower().getAcademy().getName());
+            Borrower borrower = new Borrower(newBorrowingOrder.getBorrower().getId(),
+                    newBorrowingOrder.getBorrower().getName(), academy);
+            newBorrowingOrder.setBorrower(borrower);
+            Room room = roomRepository.findByName(newBorrowingOrder.getRoom().getName());
+            newBorrowingOrder.setRoom(room);
+            List<BorrowingOrder> borrowingOrderList =
+                    borrowingOrderRepository.findBorrowingOrdersByRoomName(newBorrowingOrder.getRoom().getName());
+            for (BorrowingOrder bO : borrowingOrderList) {
+                if (bO.getStartTime().compareTo(newBorrowingOrder.getEndTime()) < 0
+                        || bO.getEndTime().compareTo(newBorrowingOrder.getStartTime()) > 0) {
+                    throw new BorrowingOrderConflictException(bO);
+                }
+            }
+            if (!oldBorrowingOrder.get().getBorrower().getId().equals(borrower.getId()) ||
+                    !oldBorrowingOrder.get().getBorrower().getName().equals(borrower.getName()) ||
+                    !oldBorrowingOrder.get().getBorrower().getAcademy().getId().equals(borrower.getAcademy().getId())) {
+                borrowerRepository.deleteById(oldBorrowingOrder.get().getBorrower().getId());
+                borrowerRepository.save(borrower);
+            }
+            newBorrowingOrder.setId(oldBorrowingOrder.get().getId());
+            borrowingOrderRepository.save(newBorrowingOrder);
+            return newBorrowingOrder;
+        } else {
+            throw new BorrowingOrderDaoException("No such order");
+        }
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public BorrowingOrder deleteOrderByOrderId(Integer id) {
-        BorrowingOrder borrowingOrder = borrowingOrderRepository.findById(id).get();
-        borrowingOrderRepository.deleteById(id);
-        return borrowingOrder;
+    public BorrowingOrder deleteOrderByOrderId(Integer id) throws BorrowingOrderDaoException {
+        Optional<BorrowingOrder> borrowingOrder = borrowingOrderRepository.findById(id);
+        if (borrowingOrder.isPresent()) {
+            borrowingOrderRepository.deleteById(id);
+            return borrowingOrder.get();
+        } else {
+            throw new BorrowingOrderDaoException("No such order");
+        }
     }
 }

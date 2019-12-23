@@ -1,40 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-    <script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript">
-        function post() {
-            var params = {
-                'name': '学生活动空间'
-            }
-            $.ajax({
-                type: 'post',
-                url: '/room/test',
-                data: JSON.stringify(params).toString(),
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function (data) {
-                    alert("!!!");
-                }
-            });
+    <meta charset="utf-8">
+    <title>睿信社区</title>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            padding: 50px;
         }
-
-        function get() {
-            $.get("./room/1", function (room, status) {
-                if (room == null)
-                    alert("Empty!");
-                else
-                    alert(JSON.stringify(room));
-            })
-        }
-    </script>
+    </style>
+    <script src="webjars/jquery/2.1.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </head>
 <body>
-<div id="content">
-    Hello!
-    <input type="button" onclick="post()" value="test">
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">睿信书院社区空间管理平台</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#roomService">房间管理</a></li>
+                <li><a href="#orderService">借用请求管理</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" id="roomService">
+    <div class="row" style="padding: 10px 0px;">
+        <ul id="roomTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#allRoom" data-toggle="tab">
+                    所有房间
+                </a>
+            </li>
+            <li>
+                <a href="#addRoom" data-toggle="tab">
+                    添加房间
+                </a>
+            </li>
+            <li>
+                <a href="#findRoom" data-toggle="tab">
+                    查询房间
+                </a>
+            </li>
+            <li>
+                <a href="#updateRoom" data-toggle="tab">
+                    更改房间信息
+                </a>
+            </li>
+            <li>
+                <a href="#deleteRoom" data-toggle="tab">
+                    删除房间
+                </a>
+            </li>
+        </ul>
+        <div id="roomTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="allRoom">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>房间名称</th>
+                        <th>房间备注</th>
+                        <th>是否可借用</th>
+                    </tr>
+                    </thead>
+                    <tbody id="getRoomTable">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="addRoom" style="padding: 10px 0px;">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">房间名称</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="note">房间描述</label>
+                        <input type="text" class="form-control" id="note" name="note" placeholder="请输入描述">
+                        <p class="help-block">房间的一般描述</p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="availabilityValue" id="availabilityValue"> 是否可借用
+                        </label>
+                    </div>
+                    <button class="btn">提交</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="findRoom" style="padding: 10px 0px;">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">房间名称</label>
+                        <input type="text" class="form-control" name="name" placeholder="请输入名称">
+                    </div>
+                    <button class="btn">提交</button>
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>房间名称</th>
+                        <th>房间备注</th>
+                        <th>是否可借用</th>
+                    </tr>
+                    </thead>
+                    <tbody id="findRoomTable">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="updateRoom" style="padding: 10px 0px;">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">房间名称</label>
+                        <input type="text" class="form-control" name="name" placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="note">房间描述</label>
+                        <input type="text" class="form-control" name="note" placeholder="请输入描述">
+                        <p class="help-block">房间的一般描述</p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="availabilityValue"> 是否可借用
+                        </label>
+                    </div>
+                    <button class="btn">提交</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="deleteRoom" style="padding: 10px 0px;">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="name">房间名称</label>
+                        <input type="text" class="form-control" name="name" placeholder="请输入名称">
+                    </div>
+                    <button class="btn">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="orderService">
 </div>
 </body>
 </html>
