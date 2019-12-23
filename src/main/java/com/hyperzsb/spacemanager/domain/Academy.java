@@ -17,6 +17,10 @@ public class Academy {
         this.name = name;
     }
 
+    public Academy(String name) {
+        this.name = name;
+    }
+
     public Academy() {
         this.id = 0;
         this.name = "";
