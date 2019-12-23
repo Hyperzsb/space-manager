@@ -14,7 +14,7 @@ public class Borrower {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "academy_id", referencedColumnName = "id")
+    @JoinColumn(name = "academy_id")
     private Academy academy;
 
     public Borrower(Integer id, String name, Academy academy) {
@@ -49,7 +49,6 @@ public class Borrower {
         return academy;
     }
 
-    @JsonBackReference
     public void setAcademy(Academy academy) {
         this.academy = academy;
     }

@@ -7,9 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 @SpringBootApplication
 public class SpaceManagerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SpaceManagerApplication.class, args);
     }
-
 }

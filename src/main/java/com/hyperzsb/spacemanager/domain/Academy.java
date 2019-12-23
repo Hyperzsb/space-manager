@@ -1,6 +1,7 @@
 package com.hyperzsb.spacemanager.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "academy")
@@ -14,6 +15,10 @@ public class Academy {
 
     public Academy(Integer id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Academy(String name) {
         this.name = name;
     }
 

@@ -34,6 +34,10 @@ public class Room {
         this.availability = Availability.getAvailabilityByValue(availabilityValue);
     }
 
+    public Room(String name) {
+        this.name = name;
+    }
+
     public Room() {
         this.name = null;
         this.note = null;
