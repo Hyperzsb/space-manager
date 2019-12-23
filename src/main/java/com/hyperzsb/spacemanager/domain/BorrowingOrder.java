@@ -4,6 +4,7 @@ import com.hyperzsb.spacemanager.converter.OrderStatusConverter;
 import com.hyperzsb.spacemanager.emuneration.OrderStatus;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,7 +12,7 @@ import java.sql.Timestamp;
 public class BorrowingOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "borrower_id", referencedColumnName = "id")
@@ -67,11 +68,11 @@ public class BorrowingOrder {
         this.orderStatus=OrderStatus.UNDETERMINED;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

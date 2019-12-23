@@ -47,7 +47,16 @@ public class BorrowingOrderVo {
     }
 
     public static BorrowingOrderVo convertToVo(BorrowingOrder borrowingOrder) {
-        return null;
+        BorrowingOrderVo borrowingOrderVo = new BorrowingOrderVo();
+        borrowingOrderVo.setBorrowerId(borrowingOrder.getBorrower().getId());
+        borrowingOrderVo.setBorrowerName(borrowingOrder.getBorrower().getName());
+        borrowingOrderVo.setBorrowerAcademyName(borrowingOrder.getBorrower().getAcademy().getName());
+        borrowingOrderVo.setRoomName(borrowingOrder.getRoom().getName());
+        borrowingOrderVo.setNote(borrowingOrder.getNote());
+        borrowingOrderVo.setTime(borrowingOrder.getTime().toString());
+        borrowingOrderVo.setStartTime(borrowingOrder.getStartTime().toString());
+        borrowingOrderVo.setEndTime(borrowingOrder.getEndTime().toString());
+        return borrowingOrderVo;
     }
 
     public BorrowingOrderVo() {
