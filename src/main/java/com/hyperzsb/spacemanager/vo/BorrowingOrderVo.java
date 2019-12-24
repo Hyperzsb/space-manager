@@ -6,9 +6,9 @@ import com.hyperzsb.spacemanager.domain.BorrowingOrder;
 import com.hyperzsb.spacemanager.domain.Room;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class BorrowingOrderVo {
+    private Integer orderId;
     private String roomName;
     private Integer borrowerId;
     private String borrowerName;
@@ -18,8 +18,9 @@ public class BorrowingOrderVo {
     private String startTime;
     private String endTime;
 
-    public BorrowingOrderVo(String roomName, Integer borrowerId, String borrowerName, String borrowerAcademyName,
+    public BorrowingOrderVo(Integer orderId, String roomName, Integer borrowerId, String borrowerName, String borrowerAcademyName,
                             String time, String startTime, String endTime) {
+        this.orderId = orderId;
         this.roomName = roomName;
         this.borrowerId = borrowerId;
         this.borrowerName = borrowerName;
@@ -27,6 +28,9 @@ public class BorrowingOrderVo {
         this.time = time;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public BorrowingOrderVo() {
     }
 
     public static BorrowingOrder convertToPo(BorrowingOrderVo borrowingOrderVo) {
@@ -37,6 +41,7 @@ public class BorrowingOrderVo {
         borrower.setAcademy(academy);
         Room room = new Room(borrowingOrderVo.getRoomName());
         BorrowingOrder borrowingOrder = new BorrowingOrder();
+        borrowingOrder.setId(borrowingOrderVo.getOrderId());
         borrowingOrder.setBorrower(borrower);
         borrowingOrder.setRoom(room);
         borrowingOrder.setNote(borrowingOrderVo.getNote());
@@ -48,6 +53,7 @@ public class BorrowingOrderVo {
 
     public static BorrowingOrderVo convertToVo(BorrowingOrder borrowingOrder) {
         BorrowingOrderVo borrowingOrderVo = new BorrowingOrderVo();
+        borrowingOrderVo.setOrderId(borrowingOrder.getId());
         borrowingOrderVo.setBorrowerId(borrowingOrder.getBorrower().getId());
         borrowingOrderVo.setBorrowerName(borrowingOrder.getBorrower().getName());
         borrowingOrderVo.setBorrowerAcademyName(borrowingOrder.getBorrower().getAcademy().getName());
@@ -59,7 +65,12 @@ public class BorrowingOrderVo {
         return borrowingOrderVo;
     }
 
-    public BorrowingOrderVo() {
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public String getRoomName() {

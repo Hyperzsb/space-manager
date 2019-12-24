@@ -8,6 +8,8 @@ import java.util.List;
 public interface BorrowingOrderService {
     BorrowingOrder addOrder(BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException;
 
+    List<BorrowingOrder> getOrder();
+
     BorrowingOrder getOrderByOrderId(Integer id) throws BorrowingOrderDaoException;
 
     List<BorrowingOrder> getOrderByBorrowerId(Integer id);

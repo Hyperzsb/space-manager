@@ -42,6 +42,16 @@ public class BorrowingOrderController {
         }
     }
 
+    @GetMapping("/")
+    public List<BorrowingOrderVo> getOrder() {
+        List<BorrowingOrderVo> borrowingOrderVoList = new ArrayList<BorrowingOrderVo>();
+        List<BorrowingOrder> borrowingOrderList = borrowingOrderService.getOrder();
+        for (BorrowingOrder borrowingOrder : borrowingOrderList) {
+            borrowingOrderVoList.add(BorrowingOrderVo.convertToVo(borrowingOrder));
+        }
+        return borrowingOrderVoList;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BorrowingOrderVo> getOrderById(@PathVariable("id") Integer id) {
         try {

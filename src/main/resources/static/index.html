@@ -21,7 +21,7 @@
             <a class="navbar-brand" href="#">睿信书院社区空间管理平台</a>
         </div>
         <div>
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav" id="nav">
                 <li class="active"><a href="#roomService">房间管理</a></li>
                 <li><a href="#orderService">借用请求管理</a></li>
             </ul>
@@ -75,17 +75,17 @@
             <div class="tab-pane fade" id="addRoom" style="padding: 10px 0px;">
                 <form role="form">
                     <div class="form-group">
-                        <label for="name">房间名称</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="请输入名称">
+                        <label>房间名称</label>
+                        <input type="text" class="form-control" name="name" placeholder="请输入名称">
                     </div>
                     <div class="form-group">
-                        <label for="note">房间描述</label>
-                        <input type="text" class="form-control" id="note" name="note" placeholder="请输入描述">
+                        <label>房间描述</label>
+                        <input type="text" class="form-control" name="note" placeholder="请输入描述">
                         <p class="help-block">房间的一般描述</p>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="availabilityValue" id="availabilityValue"> 是否可借用
+                            <input type="checkbox" name="availabilityValue"> 是否可借用
                         </label>
                     </div>
                     <button class="btn">提交</button>
@@ -94,7 +94,7 @@
             <div class="tab-pane fade" id="findRoom" style="padding: 10px 0px;">
                 <form role="form">
                     <div class="form-group">
-                        <label for="name">房间名称</label>
+                        <label>房间名称</label>
                         <input type="text" class="form-control" name="name" placeholder="请输入名称">
                     </div>
                     <button class="btn">提交</button>
@@ -114,11 +114,11 @@
             <div class="tab-pane fade" id="updateRoom" style="padding: 10px 0px;">
                 <form role="form">
                     <div class="form-group">
-                        <label for="name">房间名称</label>
+                        <label>房间名称</label>
                         <input type="text" class="form-control" name="name" placeholder="请输入名称">
                     </div>
                     <div class="form-group">
-                        <label for="note">房间描述</label>
+                        <label>房间描述</label>
                         <input type="text" class="form-control" name="note" placeholder="请输入描述">
                         <p class="help-block">房间的一般描述</p>
                     </div>
@@ -133,7 +133,7 @@
             <div class="tab-pane fade" id="deleteRoom" style="padding: 10px 0px;">
                 <form role="form">
                     <div class="form-group">
-                        <label for="name">房间名称</label>
+                        <label>房间名称</label>
                         <input type="text" class="form-control" name="name" placeholder="请输入名称">
                     </div>
                     <button class="btn">提交</button>
@@ -142,7 +142,138 @@
         </div>
     </div>
 </div>
-<div class="container" id="orderService">
+<div class="container" id="orderService" style="display: none">
+    <div class="row" style="padding: 10px 0px;">
+        <ul id="orderTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#allOrder" data-toggle="tab">
+                    所有房间
+                </a>
+            </li>
+            <li>
+                <a href="#addOrder" data-toggle="tab">
+                    添加申请
+                </a>
+            </li>
+            <!--            <li>-->
+            <!--                <a href="#findOrder" data-toggle="tab">-->
+            <!--                    查询申请-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#updateOrder" data-toggle="tab">-->
+            <!--                    更改申请信息-->
+            <!--                </a>-->
+            <!--            </li>-->
+            <!--            <li>-->
+            <!--                <a href="#deleteOrder" data-toggle="tab">-->
+            <!--                    删除申请-->
+            <!--                </a>-->
+            <!--            </li>-->
+        </ul>
+        <div id="orderTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="allOrder">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>申请ID</th>
+                        <th>申请房间</th>
+                        <th>申请人ID</th>
+                        <th>申请人姓名</th>
+                        <th>申请人所在书院</th>
+                        <th>申请用途</th>
+                        <th>申请时间</th>
+                        <th>借用开始时间</th>
+                        <th>借用结束时间</th>
+                    </tr>
+                    </thead>
+                    <tbody id="getOrderTable">
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="addOrder" style="padding: 10px 0px;">
+                <form role="form">
+                    <div class="form-group">
+                        <label>申请房间名称</label>
+                        <input type="text" class="form-control" name="roomName" placeholder="申请房间名称">
+                    </div>
+                    <div class="form-group">
+                        <label>申请人ID</label>
+                        <input type="text" class="form-control" name="borrowerId" placeholder="请输入申请人ID">
+                    </div>
+                    <div class="form-group">
+                        <label>申请人姓名</label>
+                        <input type="text" class="form-control" name="borrowerName" placeholder="请输入申请人姓名">
+                    </div>
+                    <div class="form-group">
+                        <label>申请人所在书院</label>
+                        <input type="text" class="form-control" name="borrowerAcademyName" placeholder="请输入申请人所在书院">
+                    </div>
+                    <div class="form-group">
+                        <label>申请用途</label>
+                        <input type="text" class="form-control" name="note" placeholder="请输入申请用途">
+                    </div>
+                    <div class="form-group">
+                        <label>借用开始时间</label>
+                        <input type="text" class="form-control" name="startTime" placeholder="请输入开始时间：yyyy-mm-dd hh:mm:ss">
+                    </div>
+                    <div class="form-group">
+                        <label>借用结束时间</label>
+                        <input type="text" class="form-control" name="endTime" placeholder="请输入结束时间：yyyy-mm-dd hh:mm:ss">
+                    </div>
+                    <button class="btn">提交</button>
+                </form>
+            </div>
+<!--            <div class="tab-pane fade" id="findOrder" style="padding: 10px 0px;">-->
+            <!--                <form role="form">-->
+            <!--                    <div class="form-group">-->
+            <!--                        <label>房间名称</label>-->
+            <!--                        <input type="text" class="form-control" name="name" placeholder="请输入名称">-->
+            <!--                    </div>-->
+            <!--                    <button class="btn">提交</button>-->
+            <!--                </form>-->
+            <!--                <table class="table table-striped">-->
+            <!--                    <thead>-->
+            <!--                    <tr>-->
+            <!--                        <th>房间名称</th>-->
+            <!--                        <th>房间备注</th>-->
+            <!--                        <th>是否可借用</th>-->
+            <!--                    </tr>-->
+            <!--                    </thead>-->
+            <!--                    <tbody id="findOrderTable">-->
+            <!--                    </tbody>-->
+            <!--                </table>-->
+            <!--            </div>-->
+            <!--            <div class="tab-pane fade" id="updateOrder" style="padding: 10px 0px;">-->
+            <!--                <form role="form">-->
+            <!--                    <div class="form-group">-->
+            <!--                        <label>房间名称</label>-->
+            <!--                        <input type="text" class="form-control" name="name" placeholder="请输入名称">-->
+            <!--                    </div>-->
+            <!--                    <div class="form-group">-->
+            <!--                        <label>房间描述</label>-->
+            <!--                        <input type="text" class="form-control" name="note" placeholder="请输入描述">-->
+            <!--                        <p class="help-block">房间的一般描述</p>-->
+            <!--                    </div>-->
+            <!--                    <div class="checkbox">-->
+            <!--                        <label>-->
+            <!--                            <input type="checkbox" name="availabilityValue"> 是否可借用-->
+            <!--                        </label>-->
+            <!--                    </div>-->
+            <!--                    <button class="btn">提交</button>-->
+            <!--                </form>-->
+            <!--            </div>-->
+            <!--            <div class="tab-pane fade" id="deleteOrder" style="padding: 10px 0px;">-->
+            <!--                <form role="form">-->
+            <!--                    <div class="form-group">-->
+            <!--                        <label>房间名称</label>-->
+            <!--                        <input type="text" class="form-control" name="name" placeholder="请输入名称">-->
+            <!--                    </div>-->
+            <!--                    <button class="btn">提交</button>-->
+            <!--                </form>-->
+            <!--            </div>-->
+        </div>
+    </div>
 </div>
 </body>
 </html>
