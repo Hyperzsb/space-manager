@@ -57,6 +57,12 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<BorrowingOrder> getOrder() {
+        return borrowingOrderRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public BorrowingOrder getOrderByOrderId(Integer id) throws BorrowingOrderDaoException {
         Optional<BorrowingOrder> borrowingOrder = borrowingOrderRepository.findById(id);
         if (borrowingOrder.isPresent())
