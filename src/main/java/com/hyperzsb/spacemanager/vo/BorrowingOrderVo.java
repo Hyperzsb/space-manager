@@ -4,10 +4,14 @@ import com.hyperzsb.spacemanager.domain.Academy;
 import com.hyperzsb.spacemanager.domain.Borrower;
 import com.hyperzsb.spacemanager.domain.BorrowingOrder;
 import com.hyperzsb.spacemanager.domain.Room;
+import com.hyperzsb.spacemanager.emuneration.OrderStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Timestamp;
 
 public class BorrowingOrderVo {
+    private static Logger logger = LogManager.getLogger(BorrowingOrderVo.class);
     private Integer orderId;
     private String roomName;
     private Integer borrowerId;
@@ -17,9 +21,10 @@ public class BorrowingOrderVo {
     private String time;
     private String startTime;
     private String endTime;
+    private Integer orderStatus;
 
     public BorrowingOrderVo(Integer orderId, String roomName, Integer borrowerId, String borrowerName, String borrowerAcademyName,
-                            String time, String startTime, String endTime) {
+                            String time, String startTime, String endTime, Integer orderStatus) {
         this.orderId = orderId;
         this.roomName = roomName;
         this.borrowerId = borrowerId;
@@ -28,12 +33,14 @@ public class BorrowingOrderVo {
         this.time = time;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.orderStatus = orderStatus;
     }
 
     public BorrowingOrderVo() {
     }
 
     public static BorrowingOrder convertToPo(BorrowingOrderVo borrowingOrderVo) {
+        logger.info(borrowingOrderVo.toString());
         Borrower borrower = new Borrower();
         borrower.setId(borrowingOrderVo.getBorrowerId());
         borrower.setName(borrowingOrderVo.getBorrowerName());
@@ -45,6 +52,7 @@ public class BorrowingOrderVo {
         borrowingOrder.setBorrower(borrower);
         borrowingOrder.setRoom(room);
         borrowingOrder.setNote(borrowingOrderVo.getNote());
+        logger.info(borrowingOrderVo.getTime());
         borrowingOrder.setTime(Timestamp.valueOf(borrowingOrderVo.getTime()));
         borrowingOrder.setStartTime(Timestamp.valueOf(borrowingOrderVo.getStartTime()));
         borrowingOrder.setEndTime(Timestamp.valueOf(borrowingOrderVo.getEndTime()));
@@ -62,6 +70,7 @@ public class BorrowingOrderVo {
         borrowingOrderVo.setTime(borrowingOrder.getTime().toString());
         borrowingOrderVo.setStartTime(borrowingOrder.getStartTime().toString());
         borrowingOrderVo.setEndTime(borrowingOrder.getEndTime().toString());
+        borrowingOrderVo.setOrderStatus(borrowingOrder.getOrderStatus().getValue());
         return borrowingOrderVo;
     }
 
@@ -135,5 +144,29 @@ public class BorrowingOrderVo {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"orderId\": " + orderId +
+                ", \"roomName\": \"" + roomName + '\"' +
+                ", \"borrowerId\": " + borrowerId +
+                ", \"borrowerName\": \"" + borrowerName + '\"' +
+                ", \"borrowerAcademyName\": \"" + borrowerAcademyName + '\"' +
+                ", \"note\": \"" + note + '\"' +
+                ", \"time\": \"" + time + '\"' +
+                ", \"startTime\": \"" + startTime + '\"' +
+                ", \"endTime\": \"" + endTime + '\"' +
+                ", \"orderStatus\": " + orderStatus +
+                "}";
     }
 }

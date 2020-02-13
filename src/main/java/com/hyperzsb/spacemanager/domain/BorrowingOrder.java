@@ -55,7 +55,7 @@ public class BorrowingOrder {
         this.time = time;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.orderStatus=OrderStatus.UNDETERMINED;
+        this.orderStatus = OrderStatus.UNDETERMINED;
     }
 
     public BorrowingOrder() {
@@ -65,7 +65,7 @@ public class BorrowingOrder {
         this.time = null;
         this.startTime = null;
         this.endTime = null;
-        this.orderStatus=OrderStatus.UNDETERMINED;
+        this.orderStatus = OrderStatus.UNDETERMINED;
     }
 
     public Integer getId() {
