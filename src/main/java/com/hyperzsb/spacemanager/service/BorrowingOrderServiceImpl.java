@@ -10,6 +10,8 @@ import com.hyperzsb.spacemanager.repository.AcademyRepository;
 import com.hyperzsb.spacemanager.repository.BorrowerRepository;
 import com.hyperzsb.spacemanager.repository.BorrowingOrderRepository;
 import com.hyperzsb.spacemanager.repository.RoomRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 @Service
 public class BorrowingOrderServiceImpl implements BorrowingOrderService {
+    private Logger logger = LogManager.getLogger(BorrowingOrderServiceImpl.class);
     @Autowired
     private BorrowingOrderRepository borrowingOrderRepository;
     @Autowired
@@ -42,8 +45,10 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
             List<BorrowingOrder> borrowingOrderList =
                     borrowingOrderRepository.findBorrowingOrdersByRoomName(borrowingOrder.getRoom().getName());
             for (BorrowingOrder bO : borrowingOrderList) {
-                if (bO.getStartTime().compareTo(borrowingOrder.getEndTime()) < 0
-                        || bO.getEndTime().compareTo(borrowingOrder.getStartTime()) > 0) {
+                if ((bO.getStartTime().compareTo(borrowingOrder.getEndTime()) < 0
+                        && bO.getEndTime().compareTo(borrowingOrder.getStartTime()) > 0)
+                        || (bO.getEndTime().compareTo(borrowingOrder.getStartTime()) > 0
+                        && bO.getStartTime().compareTo(borrowingOrder.getEndTime()) < 0)) {
                     throw new BorrowingOrderConflictException(bO);
                 }
             }
@@ -51,7 +56,11 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
             borrowingOrderRepository.save(borrowingOrder);
             return borrowingOrder;
         } catch (Exception e) {
-            throw new BorrowingOrderDaoException("Unable to add new order");
+            if (e instanceof BorrowingOrderConflictException) {
+                throw e;
+            } else {
+                throw new BorrowingOrderDaoException("Unable to add new order");
+            }
         }
     }
 

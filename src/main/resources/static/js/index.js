@@ -308,6 +308,7 @@ function bindEventHandler() {
             orderVo[args[arg].name] = args[arg].value;
         }
         orderVo.time = getCurrentTime();
+        alert(JSON.stringify(orderVo).toString());
         $.ajax({
             type: 'post',
             url: './order/',
@@ -322,7 +323,8 @@ function bindEventHandler() {
                     '             </div>';
                 addRoom.prepend(successBar);
             },
-            error: function () {
+            error: function (XMLHttpRequest) {
+                alert(XMLHttpRequest.getAllResponseHeaders());
                 let addRoom = $('#addOrder');
                 let failBar = '<div class="alert alert-danger">\n' +
                     '              <a href="#" class="close" data-dismiss="alert">&times;</a>\n' +
@@ -350,6 +352,7 @@ function getCurrentTime() {
         + " " + hour + ":" + minute + ":" + second;
     return curTime;
 }
+
 function zeroFill(i) {
     if (i >= 0 && i <= 9) {
         return "0" + i;

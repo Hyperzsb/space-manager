@@ -39,7 +39,6 @@ public class RoomController {
     }
 
     @GetMapping("/")
-    @ResponseBody
     public List<RoomVo> getRoom() {
         List<Room> roomList = roomService.getAllRoom();
         List<RoomVo> roomVoList = new ArrayList<RoomVo>();
@@ -50,7 +49,6 @@ public class RoomController {
     }
 
     @GetMapping("/{name}")
-    @ResponseBody
     public RoomVo getRoom(@PathVariable("name") String name) {
         Room room = roomService.getRoomByName(name);
         return RoomVo.convertToVo(room);
@@ -65,7 +63,6 @@ public class RoomController {
     }
 
     @DeleteMapping("/{name}")
-    @ResponseBody
     public RoomVo deleteRoom(@PathVariable("name") String name) {
         Room room = roomService.removeRoomByName(name);
         return RoomVo.convertToVo(room);

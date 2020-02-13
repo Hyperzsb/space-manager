@@ -1,7 +1,5 @@
 package com.hyperzsb.spacemanager.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 
 @Entity

@@ -1,7 +1,6 @@
 package com.hyperzsb.spacemanager.domain;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "academy")
