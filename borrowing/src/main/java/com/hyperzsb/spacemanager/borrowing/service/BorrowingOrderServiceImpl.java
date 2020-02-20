@@ -4,6 +4,7 @@ import com.hyperzsb.spacemanager.borrowing.domain.Academy;
 import com.hyperzsb.spacemanager.borrowing.domain.Borrower;
 import com.hyperzsb.spacemanager.borrowing.domain.BorrowingOrder;
 import com.hyperzsb.spacemanager.borrowing.domain.Room;
+import com.hyperzsb.spacemanager.borrowing.enumeration.OrderStatus;
 import com.hyperzsb.spacemanager.borrowing.exception.BorrowingOrderConflictException;
 import com.hyperzsb.spacemanager.borrowing.exception.BorrowingOrderDaoException;
 import com.hyperzsb.spacemanager.borrowing.repository.AcademyRepository;
@@ -24,12 +25,16 @@ import java.util.Optional;
 public class BorrowingOrderServiceImpl implements BorrowingOrderService {
 
     private Logger logger = LogManager.getLogger(BorrowingOrderServiceImpl.class);
+
     @Autowired
     private BorrowingOrderRepository borrowingOrderRepository;
+
     @Autowired
     private RoomRepository roomRepository;
+
     @Autowired
     private BorrowerRepository borrowerRepository;
+
     @Autowired
     private AcademyRepository academyRepository;
 
@@ -131,6 +136,19 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
                 borrowerRepository.save(borrower);
             }
             newBorrowingOrder.setId(oldBorrowingOrder.get().getId());
+            borrowingOrderRepository.save(newBorrowingOrder);
+            return newBorrowingOrder;
+        } else {
+            throw new BorrowingOrderDaoException("No such order");
+        }
+    }
+
+    @Override
+    public BorrowingOrder updateOrderStatusByOrderId(Integer id, Integer orderStatusValue) throws BorrowingOrderDaoException {
+        Optional<BorrowingOrder> borrowingOrder = borrowingOrderRepository.findById(id);
+        if (borrowingOrder.isPresent()) {
+            BorrowingOrder newBorrowingOrder = borrowingOrder.get();
+            newBorrowingOrder.setOrderStatus(OrderStatus.getOrderStatusByValue(orderStatusValue));
             borrowingOrderRepository.save(newBorrowingOrder);
             return newBorrowingOrder;
         } else {

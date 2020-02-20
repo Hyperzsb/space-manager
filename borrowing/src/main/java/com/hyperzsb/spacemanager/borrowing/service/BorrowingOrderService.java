@@ -22,5 +22,7 @@ public interface BorrowingOrderService {
 
     BorrowingOrder updateOrderByOrderId(Integer id, BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException;
 
+    BorrowingOrder updateOrderStatusByOrderId(Integer id, Integer orderStatusValue) throws BorrowingOrderDaoException;
+
     BorrowingOrder deleteOrderByOrderId(Integer id) throws BorrowingOrderDaoException;
 }

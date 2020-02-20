@@ -6,9 +6,6 @@ import com.hyperzsb.spacemanager.borrowing.vo.RoomVo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,26 +19,9 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/")
-    public ResponseEntity<RoomVo> addRoom(@RequestBody RoomVo roomVo) {
-        try {
-            Room room = roomService.addRoom(RoomVo.convertToPo(roomVo));
-            RoomVo resultRoomVo = RoomVo.convertToVo(room);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String success = "Y";
-            httpHeaders.add("success", success);
-            return new ResponseEntity<RoomVo>(resultRoomVo, httpHeaders, HttpStatus.CREATED);
-        } catch (Exception e) {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String fail = "N";
-            httpHeaders.add("success", fail);
-            return new ResponseEntity<RoomVo>(null, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping("/")
-    public List<RoomVo> getRoom() {
-        List<Room> roomList = roomService.getAllRoom();
+    public List<RoomVo> getRooms() {
+        List<Room> roomList = roomService.getRooms();
         List<RoomVo> roomVoList = new ArrayList<RoomVo>();
         for (Room room : roomList) {
             roomVoList.add(RoomVo.convertToVo(room));
@@ -49,24 +29,36 @@ public class RoomController {
         return roomVoList;
     }
 
-    @GetMapping("/{name}")
-    public RoomVo getRoom(@PathVariable("name") String name) {
+    @GetMapping("/id/{id}")
+    public RoomVo getRoomById(@PathVariable("id") Integer id) {
+        Room room = roomService.getRoomById(id);
+        return RoomVo.convertToVo(room);
+    }
+
+    @GetMapping("/name/{name}")
+    public RoomVo getRoomByName(@PathVariable("name") String name) {
         Room room = roomService.getRoomByName(name);
         return RoomVo.convertToVo(room);
     }
 
-    @PutMapping("/")
-    @ResponseBody
-    public RoomVo updateRoom(@RequestBody RoomVo roomVo) {
-        Room room = RoomVo.convertToPo(roomVo);
-        roomService.updateRoomByName(room.getName(), room.getNote(), room.getAvailability().getValue());
-        return roomVo;
+    @GetMapping("/nameLike/{alikeName}")
+    public List<RoomVo> getRoomsByNameLike(@PathVariable("alikeName") String alikeName) {
+        List<Room> roomList = roomService.getRoomsByNameLike(alikeName);
+        List<RoomVo> roomVoList = new ArrayList<RoomVo>();
+        for (Room room : roomList) {
+            roomVoList.add(RoomVo.convertToVo(room));
+        }
+        return roomVoList;
     }
 
-    @DeleteMapping("/{name}")
-    public RoomVo deleteRoom(@PathVariable("name") String name) {
-        Room room = roomService.removeRoomByName(name);
-        return RoomVo.convertToVo(room);
+    @GetMapping("/availability/{availabilityValue}")
+    public List<RoomVo> getRoomsByAvailabilityValue(@PathVariable("availabilityValue") Integer availabilityValue) {
+        List<Room> roomList = roomService.getRoomsByAvailabilityValue(availabilityValue);
+        List<RoomVo> roomVoList = new ArrayList<RoomVo>();
+        for (Room room : roomList) {
+            roomVoList.add(RoomVo.convertToVo(room));
+        }
+        return roomVoList;
     }
 
 }

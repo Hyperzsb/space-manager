@@ -20,9 +20,20 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public Room addRoom(Room room) {
-        if (roomRepository.findByName(room.getName()) != null)
-            throw new RoomDaoException("Room existed");
-        return roomRepository.save(room);
+        try {
+            if (roomRepository.findByName(room.getName()) != null)
+                throw new RoomDaoException("Room already existed.");
+            return roomRepository.save(room);
+        } catch (Exception e) {
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"addRoom()\" in class \"RoomController\".");
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Room> getRooms() {
+        return roomRepository.findAll();
     }
 
     @Override
@@ -42,14 +53,13 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Room> getRoomByNameLike(String alikeName) {
+    public List<Room> getRoomsByNameLike(String alikeName) {
         return roomRepository.findAllByNameLike(alikeName);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Room> getAllRoom() {
-        return roomRepository.findAll();
+    public List<Room> getRoomsByAvailabilityValue(Integer availabilityValue) {
+        return roomRepository.findAllByAvailability(Availability.getAvailabilityByValue(availabilityValue));
     }
 
     @Override
@@ -63,7 +73,8 @@ public class RoomServiceImpl implements RoomService {
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
             return roomRepository.save(room);
         } else {
-            throw new RoomDaoException("No such room to update");
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"updateRoomById(...)\" in class \"RoomController\".");
         }
     }
 
@@ -78,7 +89,34 @@ public class RoomServiceImpl implements RoomService {
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
             return roomRepository.save(room);
         } else {
-            throw new RoomDaoException("No such room to update");
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"updateRoomByName(...)\" in class \"RoomController\".");
+        }
+    }
+
+    @Override
+    public Room updateRoomAvailabilityById(Integer id, int availabilityValue) {
+        try {
+            Room room = roomRepository.findById(id).get();
+            room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
+            roomRepository.save(room);
+            return room;
+        } catch (Exception e) {
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"updateRoomAvailabilityById(...)\" in class \"RoomController\".");
+        }
+    }
+
+    @Override
+    public Room updateRoomAvailabilityByName(String name, int availabilityValue) {
+        try {
+            Room room = roomRepository.findByName(name);
+            room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
+            roomRepository.save(room);
+            return room;
+        } catch (Exception e) {
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"updateRoomAvailabilityByName(...)\" in class \"RoomController\".");
         }
     }
 
@@ -90,7 +128,8 @@ public class RoomServiceImpl implements RoomService {
             room = roomRepository.findById(id).get();
             roomRepository.deleteById(id);
         } else {
-            throw new RoomDaoException("No such room to delete");
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"removeRoomById(...)\" in class \"RoomController\".");
         }
         return room;
     }
@@ -102,18 +141,24 @@ public class RoomServiceImpl implements RoomService {
         if ((room = roomRepository.findByName(name)) != null) {
             roomRepository.deleteById(room.getId());
         } else {
-            throw new RoomDaoException("No such room to delete");
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"removeRoomByName(...)\" in class \"RoomController\".");
         }
         return room;
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public List<Room> removeAllRoom() {
-        List<Room> roomList = roomRepository.findAll();
-        for (Room room : roomList)
-            roomRepository.deleteById(room.getId());
-        return roomList;
+    public List<Room> removeRooms() {
+        try {
+            List<Room> roomList = roomRepository.findAll();
+            for (Room room : roomList)
+                roomRepository.deleteById(room.getId());
+            return roomList;
+        } catch (Exception e) {
+            throw new RoomDaoException(
+                    "Unexpected internal error occurred while executing \"removeRooms(...)\" in class \"RoomController\".");
+        }
     }
 
 }

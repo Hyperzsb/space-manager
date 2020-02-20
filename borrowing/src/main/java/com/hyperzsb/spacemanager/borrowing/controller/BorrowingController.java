@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/order")
-public class BorrowingOrderController {
+@RequestMapping("/borrowing")
+public class BorrowingController {
 
-    private Logger logger = LogManager.getLogger(BorrowingOrderController.class);
+    private Logger logger = LogManager.getLogger(BorrowingController.class);
+
     @Autowired
     private BorrowingOrderService borrowingOrderService;
 
@@ -48,7 +48,7 @@ public class BorrowingOrderController {
             if (e instanceof BorrowingOrderConflictException) {
                 BorrowingOrderConflictException exception = (BorrowingOrderConflictException) e;
                 success = "C";
-//                msg = URLEncoder.encode(BorrowingOrderVo.convertToVo(exception.getBorrowingOrder()).toString(), "utf-8");
+                //msg = URLEncoder.encode(BorrowingOrderVo.convertToVo(exception.getBorrowingOrder()).toString(), "utf-8");
                 msg = BorrowingOrderVo.convertToVo(exception.getBorrowingOrder()).toString();
             } else if (e instanceof BorrowingOrderDaoException) {
                 success = "N";
@@ -140,64 +140,6 @@ public class BorrowingOrderController {
             borrowingOrderVoList.add(BorrowingOrderVo.convertToVo(borrowingOrder));
         }
         return borrowingOrderVoList;
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<BorrowingOrderVo> updateOrderById(@PathVariable("id") Integer id, @RequestBody BorrowingOrderVo borrowingOrderVo) {
-        try {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String success = "Y";
-            String msg = "Update borrowing order succeeded.";
-            BorrowingOrder borrowingOrder = BorrowingOrderVo.convertToPo(borrowingOrderVo);
-            borrowingOrder.setId(id);
-            borrowingOrderVo = BorrowingOrderVo.convertToVo(borrowingOrderService.updateOrderByOrderId(id, borrowingOrder));
-            httpHeaders.add("success", success);
-            httpHeaders.add("message", msg);
-            return new ResponseEntity<BorrowingOrderVo>(borrowingOrderVo, httpHeaders, HttpStatus.CREATED);
-        } catch (Exception e) {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String success;
-            String msg;
-            if (e instanceof BorrowingOrderDaoException) {
-                success = "N";
-                msg = "Database error.";
-            } else {
-                success = "U";
-                msg = "Unexpected server internal error.";
-            }
-            httpHeaders.add("success", success);
-            httpHeaders.add("message", msg);
-            return new ResponseEntity<BorrowingOrderVo>(null, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PutMapping("/admin/{id}/{status}")
-    public ResponseEntity<Boolean> changeOrderStatus(@PathVariable("id") Integer id, @PathVariable("status") Integer status) {
-        try {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String success = "Y";
-            String msg = "Update borrowing order succeeded.";
-            BorrowingOrder borrowingOrder = borrowingOrderService.getOrderByOrderId(id);
-            borrowingOrder.setOrderStatus(OrderStatus.getOrderStatusByValue(status));
-            borrowingOrderService.updateOrderByOrderId(id, borrowingOrder);
-            httpHeaders.add("success", success);
-            httpHeaders.add("message", msg);
-            return new ResponseEntity<Boolean>(true, httpHeaders, HttpStatus.CREATED);
-        } catch (Exception e) {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            String success;
-            String msg;
-            if (e instanceof BorrowingOrderDaoException) {
-                success = "N";
-                msg = "Database error.";
-            } else {
-                success = "U";
-                msg = "Unexpected server internal error.";
-            }
-            httpHeaders.add("success", success);
-            httpHeaders.add("message", msg);
-            return new ResponseEntity<Boolean>(false, httpHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
 }

@@ -32,10 +32,8 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
             map = new HashMap<>(16);
             List<Role> roleList = roleService.getRoles();
             for (Role role : roleList) {
-//                System.out.println("ROLE: " + role.toString());
                 List<Permission> permissionList = permissionService.getPermissionsByRole(role);
                 for (Permission permission : permissionList) {
-//                    System.out.println("PERMISSION: " + permission.toString());
                     String url = permission.getUrl();
                     String roleName = role.getName();
                     ConfigAttribute newRole = new SecurityConfig(roleName);
@@ -49,7 +47,6 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
                 }
             }
         }
-//        System.out.println(map.toString());
         HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
         for (Iterator<String> it = map.keySet().iterator(); it.hasNext(); ) {
             String url = it.next();

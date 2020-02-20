@@ -20,10 +20,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        User user = (User) authentication.getPrincipal();
-        user.setPassword(null);
-        ResponseBean ok = ResponseBean.ok("登录成功!", user);
-        String string = new ObjectMapper().writeValueAsString(ok);
+        String string = new ObjectMapper().writeValueAsString(authentication);
         out.write(string);
         out.flush();
         out.close();
