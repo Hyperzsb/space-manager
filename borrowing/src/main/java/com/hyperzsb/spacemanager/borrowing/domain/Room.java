@@ -85,4 +85,12 @@ public class Room {
         this.availability = availability;
     }
 
+    public String toCustomString() {
+        return "Room{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", note='" + note + '\'' +
+                ", availability=" + availability +
+                '}';
+    }
 }

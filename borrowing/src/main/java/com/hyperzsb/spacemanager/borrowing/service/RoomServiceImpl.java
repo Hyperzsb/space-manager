@@ -21,7 +21,7 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public Room addRoom(Room room) {
         try {
-            if (roomRepository.findByName(room.getName()) != null)
+            if (roomRepository.findRoomByName(room.getName()) != null)
                 throw new RoomDaoException("Room already existed.");
             return roomRepository.save(room);
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional(readOnly = true)
     public Room getRoomByName(String name) {
-        return roomRepository.findByName(name);
+        return roomRepository.findRoomByName(name);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Room updateRoomByName(String name, String note, int availabilityValue) {
         Room room;
-        if (roomRepository.findByName(name) != null) {
-            room = roomRepository.findByName(name);
+        if (roomRepository.findRoomByName(name) != null) {
+            room = roomRepository.findRoomByName(name);
             room.setName(name);
             room.setNote(note);
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
@@ -110,7 +110,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Room updateRoomAvailabilityByName(String name, int availabilityValue) {
         try {
-            Room room = roomRepository.findByName(name);
+            Room room = roomRepository.findRoomByName(name);
             room.setAvailability(Availability.getAvailabilityByValue(availabilityValue));
             roomRepository.save(room);
             return room;
@@ -138,7 +138,7 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Room removeRoomByName(String name) {
         Room room;
-        if ((room = roomRepository.findByName(name)) != null) {
+        if ((room = roomRepository.findRoomByName(name)) != null) {
             roomRepository.deleteById(room.getId());
         } else {
             throw new RoomDaoException(

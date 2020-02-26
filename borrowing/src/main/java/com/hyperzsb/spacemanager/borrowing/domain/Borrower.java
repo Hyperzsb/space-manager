@@ -52,4 +52,11 @@ public class Borrower {
         this.academy = academy;
     }
 
+    public String toCustomString() {
+        return "Borrower{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", academy=" + academy.toCustomString() +
+                '}';
+    }
 }

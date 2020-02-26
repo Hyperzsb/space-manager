@@ -33,6 +33,7 @@ public class BorrowingController {
         try {
             BorrowingOrder borrowingOrder = BorrowingOrderVo.convertToPo(borrowingOrderVo);
             borrowingOrder.setOrderStatus(OrderStatus.getOrderStatusByValue(2));
+            logger.info("Start controller. Borrowing order is: " + borrowingOrder.toCustomString());
             borrowingOrder = borrowingOrderService.addOrder(borrowingOrder);
             borrowingOrderVo = BorrowingOrderVo.convertToVo(borrowingOrder);
             HttpHeaders httpHeaders = new HttpHeaders();

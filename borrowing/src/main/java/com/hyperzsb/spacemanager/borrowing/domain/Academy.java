@@ -41,4 +41,11 @@ public class Academy {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String toCustomString() {
+        return "Academy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

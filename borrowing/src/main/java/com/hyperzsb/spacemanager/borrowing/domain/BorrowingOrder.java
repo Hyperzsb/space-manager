@@ -132,4 +132,16 @@ public class BorrowingOrder {
         this.orderStatus = orderStatus;
     }
 
+    public String toCustomString() {
+        return "BorrowingOrder{" +
+                "id=" + id +
+                ", borrower=" + borrower.toCustomString() +
+                ", room=" + room.toCustomString() +
+                ", note='" + note + '\'' +
+                ", time=" + time +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", orderStatus=" + orderStatus +
+                '}';
+    }
 }

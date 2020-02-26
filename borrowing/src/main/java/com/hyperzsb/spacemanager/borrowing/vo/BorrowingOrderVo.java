@@ -40,7 +40,6 @@ public class BorrowingOrderVo {
     }
 
     public static BorrowingOrder convertToPo(BorrowingOrderVo borrowingOrderVo) {
-        logger.info(borrowingOrderVo.toString());
         Borrower borrower = new Borrower();
         borrower.setId(borrowingOrderVo.getBorrowerId());
         borrower.setName(borrowingOrderVo.getBorrowerName());
@@ -52,7 +51,6 @@ public class BorrowingOrderVo {
         borrowingOrder.setBorrower(borrower);
         borrowingOrder.setRoom(room);
         borrowingOrder.setNote(borrowingOrderVo.getNote());
-        logger.info(borrowingOrderVo.getTime());
         borrowingOrder.setTime(Timestamp.valueOf(borrowingOrderVo.getTime()));
         borrowingOrder.setStartTime(Timestamp.valueOf(borrowingOrderVo.getStartTime()));
         borrowingOrder.setEndTime(Timestamp.valueOf(borrowingOrderVo.getEndTime()));

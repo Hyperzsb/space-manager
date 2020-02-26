@@ -42,11 +42,26 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public BorrowingOrder addOrder(BorrowingOrder borrowingOrder) throws BorrowingOrderDaoException {
         try {
+            logger.info("Start service.");
+            Borrower borrower = null;
+            logger.info("Finding academy...");
             Academy academy = academyRepository.findAcademyByName(borrowingOrder.getBorrower().getAcademy().getName());
-            Borrower borrower = new Borrower(borrowingOrder.getBorrower().getId(),
-                    borrowingOrder.getBorrower().getName(), academy);
+            if (academy != null) {
+                logger.info("Found academy. Academy is: " + academy.toCustomString());
+                borrower = new Borrower(borrowingOrder.getBorrower().getId(),
+                        borrowingOrder.getBorrower().getName(), academy);
+            } else {
+                logger.info("Not found academy.");
+                academy = new Academy(borrowingOrder.getBorrower().getAcademy().getName());
+                academyRepository.save(academy);
+                academy = academyRepository.findAcademyByName(borrowingOrder.getBorrower().getAcademy().getName());
+                borrower = new Borrower(borrowingOrder.getBorrower().getId(),
+                        borrowingOrder.getBorrower().getName(), academy);
+            }
             borrowingOrder.setBorrower(borrower);
-            Room room = roomRepository.findByName(borrowingOrder.getRoom().getName());
+            logger.info("Borrower set: " + borrower.toCustomString());
+            Room room = roomRepository.findRoomByName(borrowingOrder.getRoom().getName());
+            logger.info("Found room: " + room.toCustomString());
             borrowingOrder.setRoom(room);
             List<BorrowingOrder> borrowingOrderList =
                     borrowingOrderRepository.findBorrowingOrdersByRoomName(borrowingOrder.getRoom().getName());
@@ -58,8 +73,11 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
                     throw new BorrowingOrderConflictException(bO);
                 }
             }
+            logger.info("Before save");
             borrowerRepository.save(borrower);
+            logger.info("Borrower saved");
             borrowingOrderRepository.save(borrowingOrder);
+            logger.info("Borrowing order saved");
             return borrowingOrder;
         } catch (Exception e) {
             if (e instanceof BorrowingOrderConflictException) {
@@ -119,7 +137,7 @@ public class BorrowingOrderServiceImpl implements BorrowingOrderService {
             Borrower borrower = new Borrower(newBorrowingOrder.getBorrower().getId(),
                     newBorrowingOrder.getBorrower().getName(), academy);
             newBorrowingOrder.setBorrower(borrower);
-            Room room = roomRepository.findByName(newBorrowingOrder.getRoom().getName());
+            Room room = roomRepository.findRoomByName(newBorrowingOrder.getRoom().getName());
             newBorrowingOrder.setRoom(room);
             List<BorrowingOrder> borrowingOrderList =
                     borrowingOrderRepository.findBorrowingOrdersByRoomName(newBorrowingOrder.getRoom().getName());
